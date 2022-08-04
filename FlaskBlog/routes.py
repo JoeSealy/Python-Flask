@@ -2,7 +2,7 @@ import secrets
 import os
 from PIL import Image
 from flask import render_template, flash, redirect,  url_for, request
-from FlaskBlog.forms import RegistrationForm, LoginForm, UpdateAccountForm
+from FlaskBlog.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm
 from FlaskBlog.models import User, Post
 from FlaskBlog import app, db, bcrypt
 from flask_login import login_user, current_user, logout_user, login_required
@@ -103,4 +103,14 @@ def account():
     return render_template("account.html", title="Account", 
                                 image_file=image_file, form = form)
 
-    
+@app.route("/post/new", methods=["GET", "POST"])
+@login_required
+def new_post():
+    form = PostForm()
+    if form.validate_on_submit():
+        post = Post(title=form.title.data, content=form.content.data, author=current_user)
+        db.session.add(post)
+        db.session.commit()
+        flash("Your post has been created!", "success")
+        return redirect(url_for("home"))
+    return render_template("create_post.html", title = "New Post", form=form)
