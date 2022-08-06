@@ -6,25 +6,11 @@ from FlaskBlog.forms import RegistrationForm, LoginForm, UpdateAccountForm, Post
 from FlaskBlog.models import User, Post
 from FlaskBlog import app, db, bcrypt
 from flask_login import login_user, current_user, logout_user, login_required
-posts = [
-    {
-        "author": "Joe Sealy",
-        "title": "Blog Post 1",
-        "content": "First Post content",
-        "date_posted": "June 28, 2022"
-    },
-    {
-        "author": "Toe Sealy",
-        "title": "Blog Post 2",
-        "content": "Second Post content",
-        "date_posted": "June 29, 2022"
-    },
-]
-
 
 @app.route("/")
 @app.route("/home")
 def home():
+    posts = Post.query.all()
     return render_template("home.html", posts=posts)
 
 
@@ -114,3 +100,8 @@ def new_post():
         flash("Your post has been created!", "success")
         return redirect(url_for("home"))
     return render_template("create_post.html", title = "New Post", form=form)
+
+@app.route("/post/<int:post_id>")
+def post(post_id):
+    post = Post.query.get(post_id)
+    return render_template("post.html", title=post.title, post = post)
