@@ -6,9 +6,6 @@ from FlaskBlog import personal
 from flask_mail import Mail
 import os
 
-
-
-
 app = Flask(__name__)
 app.config["SECRET_KEY"] = personal.SECRET_KEY
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///site.db"
@@ -23,4 +20,10 @@ app.config["MAIL_USE_TLS"] = True
 app.config["MAIL_USERNAME"] = os.environ.get("EMAIL_USER")
 app.config["MAIL_PASSWORD"] = os.environ.get("EMAIL_PASS")
 mail = Mail(app)
-from FlaskBlog import routes
+from FlaskBlog.users.routes import users
+from FlaskBlog.posts.routes import posts
+from FlaskBlog.main.routes import main
+
+app.register_blueprint(users)
+app.register_blueprint(posts)
+app.register_blueprint(main)
