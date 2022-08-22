@@ -1,0 +1,2 @@
+Right now working on getting the flasblog site up on a domain and turning it to HTTPS://
+being quite lazy with it sorry my bad
